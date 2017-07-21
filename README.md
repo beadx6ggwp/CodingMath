@@ -1,2 +1,2 @@
 # CodingMath
-CodingMath筆記
+CodingMath Note
