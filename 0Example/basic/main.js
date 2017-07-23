@@ -69,6 +69,9 @@ function drawCircle(x, y, r, side) {
 function toRadio(angle) {
     return angle * Math.PI / 180;
 }
-function random(min, max) {
+function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
+}
+function random(min, max) {
+    return Math.random() * (max - min) + min;
 }

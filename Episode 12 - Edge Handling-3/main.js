@@ -9,10 +9,6 @@ var animation,
 var ctx_font = "Consolas",
     ctx_fontsize = 10,
     ctx_backColor = "#777";
-//-----------------------------------------
-var particles = [];
-var num = 50;
-var gravity = vector.create(0, 0.2);
 
 window.onload = function () {
     canvas = document.getElementById("myCanvas");
@@ -23,38 +19,45 @@ window.onload = function () {
     main();
 }
 
+var p;
+
 function main() {
     console.log("Start");
-    for (var i = 0; i < num; i++) {
-        let obj = particle.create(width / 2, height, randomInt(5, 13),
-            -Math.PI / 2 + random(-0.1, 0.1), 0.1);
-        obj.radius = randomInt(3, 12);
-        particles.push(obj);
-    }
+
+    p = particle.create(width / 2, height / 2, 5, random(0, Math.PI * 2), 0.1);
+    p.radius = 40;
+    p.bounce = -0.9;
 
     mainLoop();
 }
 
 function update() {
-    for (var i = 0; i < num; i++) {
-        let obj = particles[i];
-        obj.update();
+    p.update();
 
-        if (obj.pos.y - obj.radius > height) {
-            obj.setPos(width / 2, height + obj.radius);
-            obj.vel.setLength(randomInt(5, 13));
-            obj.vel.setAngle(-Math.PI / 2 + random(-0.1, 0.1));
-        }
+    if (p.pos.x + p.radius > width) {
+        p.pos.setX(width - p.radius);
+        p.vel.setX(p.vel.getX() * p.bounce);
+    }
+    if (p.pos.x - p.radius < 0) {
+        p.pos.setX(p.radius);
+        p.vel.setX(p.vel.getX() * p.bounce);
     }
 
+    if (p.pos.y + p.radius > height) {
+        p.pos.setY(height - p.radius);
+        p.vel.setY(p.vel.getY() * p.bounce);
+    }
+    if (p.pos.y - p.radius < 0) {
+        p.pos.setY(p.radius);
+        p.vel.setY(p.vel.getY() * p.bounce);
+    }
 }
+
 function draw() {
     ctx.fillStyle = "#FFF";
-    for (var i = 0; i < num; i++) {
-        let obj = particles[i];
-        drawCircle(obj.pos.x, obj.pos.y, obj.radius, 1);
-    }
+    drawCircle(p.pos.x, p.pos.y, p.radius, 1);
 }
+
 
 function mainLoop(timestamp) {
     Timesub = timestamp - lastTime;// get sleep
@@ -62,14 +65,12 @@ function mainLoop(timestamp) {
     //Clear
     ctx.fillStyle = ctx_backColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
     //--------Begin-----------
 
     update();
     draw();
 
     //--------End---------------
-    ctx.restore();
     let str1 = "Fps:" + 1000 / Timesub, str2 = "Sleep: " + Timesub;
     drawString(ctx, str1 + "\n" + str2,
         0, height - 21,
@@ -84,15 +85,15 @@ function mainLoop(timestamp) {
 
 
 //----tool-------
-function toRadio(angle) {
-    return angle * Math.PI / 180;
-}
 function drawCircle(x, y, r, side) {
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
     ctx.lineWidth = 1;
     if (side) ctx.stroke();
+}
+function toRadio(angle) {
+    return angle * Math.PI / 180;
 }
 function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
