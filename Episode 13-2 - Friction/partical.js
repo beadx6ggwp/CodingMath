@@ -5,6 +5,7 @@ var particle = {
 	gravity: null,
 	mass: 1,
 	bounce: -1,
+	friction : 1,
 
 	create: function (x, y, speed, direction, grav) {
 		var obj = Object.create(this);
@@ -14,6 +15,12 @@ var particle = {
 		obj.vel.setLength(speed);
 		obj.vel.setAngle(direction);
 		return obj;
+	},
+
+	update: function () {
+		this.vel.multiplyBy(this.friction);
+		this.vel.addTo(this.gravity);
+		this.pos.addTo(this.vel);
 	},
 
 	setPos: function (x, y) {
@@ -27,11 +34,6 @@ var particle = {
 
 	accel: function (acc) {
 		this.vel.addTo(acc);
-	},
-
-	update: function () {
-		this.vel.addTo(this.gravity);
-		this.pos.addTo(this.vel);
 	},
 
 	angleTo: function (p2) {
