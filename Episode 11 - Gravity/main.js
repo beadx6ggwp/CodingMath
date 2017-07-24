@@ -21,9 +21,12 @@ window.onload = function () {
 }
 
 var sun,
-    planet,
     sunR = 20,
+    sunMass = 5000,
+    planet,
     planetR = 10,
+    planetAcc = 5,
+    dist = 200,
     press = 0,
     offx = 0,
     offy = 0;
@@ -31,8 +34,8 @@ var sun,
 function main() {
     console.log("Start");
     sun = particle.create(width / 2, height / 2, 0, 0);
-    sun.mass = 20000;
-    planet = particle.create(width / 2 + 200, height / 2, 10, toRadio(-90));
+    sun.mass = sunMass;
+    planet = particle.create(width / 2 + dist, height / 2, planetAcc, toRadio(-90));
 
     mainLoop();
 }
@@ -41,9 +44,9 @@ function update() {
     planet.gravitateTo(sun);
     planet.update();
 
-    let dist = sun.distTo(planet) - 1000;
-    if (dist > width || dist > height) {
-        planet = particle.create(sun.pos.x + 200, sun.pos.y, 10, toRadio(-90));
+    let d = sun.distTo(planet) - 1000;
+    if (d > width || dist > height) {
+        planet = particle.create(sun.pos.x + dist, sun.pos.y, planetAcc, toRadio(-90));
     }
 }
 function draw() {

@@ -19,20 +19,36 @@ window.onload = function () {
     main();
 }
 
+var p, friction;
+
 function main() {
     console.log("Start");
+
+    p = particle.create(width / 2, height / 2, 10, random(0, Math.PI * 2), 0);
+    p.radius = 20;
+
+    friction = vector.create(0.15, 0);
 
     mainLoop();
 }
 
-
 function update() {
+    friction.setAngle(p.vel.getAngle());
+    // To prevent overflow
+    if (p.vel.getLength() > friction.getLength()) {
+        p.vel.subtractFrom(friction);
+    } else {
+        p.vel.setLength(0);
+    }
 
+    p.update();
 }
 
 function draw() {
-
+    ctx.fillStyle = "#FFF";
+    drawCircle(p.pos.x, p.pos.y, p.radius, 1);
 }
+
 
 function mainLoop(timestamp) {
     Timesub = timestamp - lastTime;// get sleep
