@@ -105,6 +105,11 @@ function mousedown(e) {
             x: mouse.x - dragPoint.x,
             y: mouse.y - dragPoint.y
         };
+        
+        let index = circles.indexOf(dragPoint);
+        circles.push(circles[index]);
+        circles.splice(index, 1);
+        // 越後面圖層越上面，所以只要將原位置刪除，並在最後加入，就不會動到其他元素的順序
     }
 }
 function mouseup(e) {
