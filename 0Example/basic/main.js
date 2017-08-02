@@ -28,11 +28,11 @@ function main() {
 }
 
 
-function update() {
+function update(dt) {
 
 }
 
-function draw() {
+function draw(ctx) {
 
 }
 
@@ -45,8 +45,8 @@ function mainLoop(timestamp) {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     //--------Begin-----------
 
-    update();
-    draw();
+    update(DeltaTime);
+    draw(ctx);
 
     //--------End---------------
     let str1 = "Fps: " + 1000 / Timesub, str2 = "Timesub: " + Timesub, str3 = "DeltaTime: " + DeltaTime;
