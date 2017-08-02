@@ -4,6 +4,7 @@ var cnavas,
     height;
 var animation,
     lastTime = 0,
+    Timesub = 0,
     DeltaTime = 0,
     loop = true;
 var ctx_font = "Consolas",
@@ -22,7 +23,8 @@ window.onload = function () {
 function main() {
     console.log("Start");
 
-    mainLoop();
+    window.requestAnimationFrame(mainLoop);
+    //mainLoop();
 }
 
 
@@ -35,7 +37,8 @@ function draw() {
 }
 
 function mainLoop(timestamp) {
-    DeltaTime = timestamp - lastTime;// get sleep
+    Timesub = timestamp - lastTime;// get sleep
+    DeltaTime = Timesub / 1000;
     lastTime = timestamp;
     //Clear
     ctx.fillStyle = ctx_backColor;
@@ -46,9 +49,9 @@ function mainLoop(timestamp) {
     draw();
 
     //--------End---------------
-    let str1 = "Fps: " + 1000 / DeltaTime, str2 = "DeltaTime: " + DeltaTime;
-    drawString(ctx, str1 + "\n" + str2,
-        0, height - 21,
+    let str1 = "Fps: " + 1000 / Timesub, str2 = "Timesub: " + Timesub, str3 = "DeltaTime: " + DeltaTime;
+    drawString(ctx, str1 + "\n" + str2 + "\n" + str3,
+        0, height - 31,
         "#FFF", 10, "consolas",
         0, 0, 0);
     if (loop) {
