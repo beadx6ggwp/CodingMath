@@ -25,7 +25,7 @@ window.onload = function () {
 }
 
 var isDown = false;
-var dragPoint;
+var dragPoint, offSet;
 var circles = [];
 
 function main() {

@@ -3,15 +3,20 @@ function Vector(x, y) {
     this.y = y || 0;
 };
 
+/* 
+    var vec = Vector.fromArray([42,21]);
+    vec.toString();
+    // => x:42, y:21
+*/
 Vector.fromArray = function (arr) {
     return new Victor(arr[0] || 0, arr[1] || 0);
 };
+
 /*
     var vec = Victor.fromObject({ x: 42, y: 21 });
     vec.toString();
     // => x:42, y:21
 */
-
 Vector.fromObject = function (obj) {
     return new Victor(obj.x || 0, obj.y || 0);
 };
@@ -25,6 +30,7 @@ Vector.prototype.clone = function () {
 Vector.prototype.toString = function () {
     return 'x:' + this.x + ', y:' + this.y;
 };
+
 
 
 Vector.prototype.add = function (vec) {
@@ -81,7 +87,7 @@ Vector.prototype.cross = function (vec2) {
     return (this.x * vec2.y) - (this.y * vec2.x);
 };
 Vector.prototype.projectOnto = function (vec2) {
-    let coeff = ( (this.x * vec2.x)+(this.y * vec2.y) ) / ((vec2.x*vec2.x)+(vec2.y*vec2.y));
+    let coeff = ((this.x * vec2.x) + (this.y * vec2.y)) / ((vec2.x * vec2.x) + (vec2.y * vec2.y));
     this.x = coeff * vec2.x;
     this.y = coeff * vec2.y;
     return this;
@@ -107,17 +113,32 @@ Vector.prototype.getAngleDeg = function () {
     return this.rad2deg(this.getAngle());
 };
 
-Vector.prototype.rotate = function(angle){
-    this.x = (this.x * Math.cos(angle)) - (this.y * Math.sin(angle));
-    this.y = (this.x * Math.sin(angle)) + (this.y * Math.cos(angle));
+Vector.prototype.rotate = function (angle) {
+    let new_x = (this.x * Math.cos(angle)) - (this.y * Math.sin(angle));
+    let new_y = (this.x * Math.sin(angle)) + (this.y * Math.cos(angle));
+
+    this.x = new_x;
+    this.y = new_y;
+    /* y error, but why?
+    this.x = this.x * Math.cos(angle) - this.y * Math.sin(angle);
+    this.y = this.y * Math.cos(angle) + this.x * Math.sin(angle);
+    */
 };
-Vector.prototype.rotateDeg = function(angle){
+Vector.prototype.rotateDeg = function (angle) {
     angle = this.deg2rad(angle);
     this.rotate(angle);
 };
 
+Vector.prototype.rotateTo = function(rotation){
+    this.rotate(rotation - this.getAngle());
+}
+Vector.prototype.rotateToDeg = function(rotation){
+    rotation = this.deg2rad(rotation);
+    this.rotateTo(rotation);
+}
 
-Vector.prototype.setLength = function(len){
+
+Vector.prototype.setLength = function (len) {
     let angle = this.getAngle();
     this.x = Math.cos(angle) * len;
     this.y = Math.sin(angle) * len;
@@ -141,6 +162,13 @@ Vector.prototype.normalize = function () {
     }
 };
 Vector.prototype.norm = Vector.prototype.normalize;
+
+Vector.prototype.normalL = function () {
+    return new Vector(-this.y, this.x);
+};
+Vector.prototype.normalR = function () {
+    return new Vector(this.y, -this.x);
+};
 
 Vector.prototype.unfloat = function () {
     this.x = Math.round(this.x);

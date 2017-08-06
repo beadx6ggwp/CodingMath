@@ -25,7 +25,7 @@ window.onload = function () {
 }
 
 var isDown = false;
-var dragPoint;
+var dragPoint, offSet;
 var rects = [];
 
 function main() {
@@ -109,7 +109,7 @@ function mousedown(e) {
         let index = rects.indexOf(dragPoint);
         rects.push(rects[index]);
         rects.splice(index, 1);
-        // 越後面圖層越上面，所以只要將原位置刪除，並在最後加入，就不會動到其他元素的順序
+        // 排序後面圖層越上面，所以只要將原位置刪除，並在最後加入，就不會動到其他元素的順序
     }
 }
 function mouseup(e) {
