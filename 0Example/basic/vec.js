@@ -190,6 +190,7 @@ Vector.prototype.rotateRefPointDeg = function (angle, refP) {
 };
 
 /* 
+    ### Examples:
     var center = new Vector(50, 50);
     var p1 = new Vector(75,50);
 
