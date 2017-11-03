@@ -7,10 +7,9 @@ var particle = {
 	bounce: -1,
 	friction : 1,
 
-	create: function (x, y, r, speed, direction, grav) {
+	create: function (x, y, speed, direction, grav) {
 		var obj = Object.create(this);
 		obj.pos = vector.create(x, y);
-		obj.radius = r;
 		obj.vel = vector.create(0, 0);
 		obj.gravity = vector.create(0, grav || 0);
 		obj.vel.setLength(speed);
@@ -19,6 +18,7 @@ var particle = {
 	},
 
 	update: function () {
+		this.vel.multiplyBy(this.friction);
 		this.vel.addTo(this.gravity);
 		this.pos.addTo(this.vel);
 	},

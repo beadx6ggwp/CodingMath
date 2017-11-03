@@ -10,7 +10,7 @@ var ctx_font = "Consolas",
     ctx_fontsize = 10,
     ctx_backColor = "#777";
 
-var keys = {}, mousePos = { x: 0, y: 0 };
+var keys = {}, mousePos = {};
 
 window.onload = function () {
     ctx = CreateDisplay("myCanvas", 800, 600);
@@ -29,8 +29,18 @@ window.onload = function () {
 
 // ----------------------------------------------------------
 
+var springPoint,
+    weight,
+    k = 0.1;
+
 function main() {
     console.log("Start");
+
+    springPoint = vector.create(width / 2, height / 2);
+    weight = particle.create(Math.random() * width, Math.random() * height,
+        50, Math.random() * Math.PI * 2)
+    weight.radius = 20;
+    weight.friction = 0.9;
 
     window.requestAnimationFrame(mainLoop);
     //mainLoop();
@@ -39,10 +49,24 @@ function main() {
 
 function update(dt) {
 
+    var distance = springPoint.subtract(weight.pos);
+    var springForce = distance.multiply(k);
+
+    weight.vel.addTo(springForce);
+    weight.update();
+
 }
 
 function draw(ctx) {
 
+    ctx.beginPath();
+    ctx.moveTo(weight.pos.x, weight.pos.y);
+    ctx.lineTo(springPoint.x, springPoint.y);
+    ctx.stroke();
+
+    ctx.fillStyle = "#FFF";
+    drawCircle(springPoint.x, springPoint.y, 4, 1);
+    drawCircle(weight.pos.x, weight.pos.y, weight.radius, 1);
 }
 
 function mainLoop(timestamp) {
@@ -87,7 +111,7 @@ function mouseup(e) {
 }
 
 function mousemove(e) {
-    mousePos.x = e.clientX - ctx.canvas.offsetLeft;
+    mousePos.x = e.clientX - ctx.canvas.offsetLeft
     mousePos.y = e.clientY - ctx.canvas.offsetTop;
 
 }
