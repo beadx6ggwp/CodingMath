@@ -9,12 +9,12 @@ var animation,
 var ctx_font = "Consolas",
     ctx_fontsize = 10,
     ctx_backColor = "#777";
-
-var keys = {}, mousePos = { x: 0, y: 0 };
+var keys = {}, mousePos = {};
 
 window.onload = function () {
     ctx = CreateDisplay("myCanvas", 800, 600);
     width = ctx.canvas.width; height = ctx.canvas.height;
+
 
 
     document.addEventListener("keydown", keydown, false);
@@ -28,23 +28,6 @@ window.onload = function () {
 }
 
 // ----------------------------------------------------------
-
-function main() {
-    console.log("Start");
-
-    window.requestAnimationFrame(mainLoop);
-    //mainLoop();
-}
-
-
-function update(dt) {
-
-}
-
-function draw(ctx) {
-
-}
-
 function mainLoop(timestamp) {
     Timesub = timestamp - lastTime;// get sleep
     DeltaTime = Timesub / 1000;
@@ -69,6 +52,22 @@ function mainLoop(timestamp) {
         // over
     }
 }
+
+function main() {
+    console.log("Start");
+
+    window.requestAnimationFrame(mainLoop);
+    //mainLoop();
+}
+
+
+function update(dt) {
+
+}
+
+function draw(ctx) {
+
+}
 //---evnt---
 function keydown(e) {
     keys[e.keyCode] = true;
@@ -87,19 +86,12 @@ function mouseup(e) {
 }
 
 function mousemove(e) {
-    mousePos.x = e.clientX - ctx.canvas.offsetLeft;
+    mousePos.x = e.clientX - ctx.canvas.offsetLeft
     mousePos.y = e.clientY - ctx.canvas.offsetTop;
 
 }
 
 //----tool-------
-function drawCircle(x, y, r, side) {
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.lineWidth = 1;
-    if (side) ctx.stroke();
-}
 function toRadio(angle) {
     return angle * Math.PI / 180;
 }
@@ -111,17 +103,28 @@ function random(min, max) {
 }
 
 //---------------------
-function CreateDisplay(id, width, height) {
+function CreateDisplay(id, width, height, border) {
     let canvas = document.createElement("canvas");
-    canvas.id = id;
-    canvas.width = width;
-    canvas.height = height;
-    canvas.style.cssText = [
+    let style_arr = [
         "display: block;",
         "margin: 0 auto;",
         "background: #FFF;",
-        "border:1px solid #000;"
-    ].join("");
+        "padding: 0;",
+        "display: block;"
+    ];
+    canvas.id = id;
+    canvas.width = width | 0;
+    canvas.height = height | 0;
+
+    if (border) style_arr.push("border:1px solid #000;");
+
+    if (!width && !height) {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    canvas.style.cssText = style_arr.join("");
+
     document.body.appendChild(canvas);
 
     return canvas.getContext("2d");
